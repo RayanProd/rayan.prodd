@@ -1,234 +1,167 @@
-import React, { useState } from "react";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rayan Prod</title>
 
-/* ===== FAKE USERS (SaaS DEMO) ===== */
-const USERS = [
-  { email: "test@rayan.com", password: "1234" }
-];
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
 
-/* ===== COURSES ===== */
-const COURSES = [
-  {
-    id: 1,
-    title: "🎬 Master Montage Vidéo",
-    desc: "Deviens expert Premiere Pro / CapCut / DaVinci",
-    price: "49€",
-  },
-  {
-    id: 2,
-    title: "🎧 Audio Engineering Pro",
-    desc: "Mixage, mastering et production audio pro",
-    price: "79€",
-  },
-  {
-    id: 3,
-    title: "📱 Social Media Growth",
-    desc: "Deviens viral sur TikTok & YouTube",
-    price: "99€",
-  },
-];
-
-export default function App() {
-  const [user, setUser] = useState(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [selected, setSelected] = useState(null);
-
-  /* ===== LOGIN ===== */
-  const login = () => {
-    const found = USERS.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (found) setUser(found);
-    else alert("Identifiants incorrects");
-  };
-
-  /* ===== LOGOUT ===== */
-  const logout = () => {
-    setUser(null);
-  };
-
-  /* ===== PAY BUTTON (STRIPE READY) ===== */
-  const buyCourse = (course) => {
-    alert("Stripe prêt à connecter pour : " + course.title);
-  };
-
-  /* ===== LOGIN PAGE ===== */
-  if (!user) {
-    return (
-      <div style={styles.login}>
-        <h1>Rayan Prod SaaS 🔐</h1>
-
-        <input
-          placeholder="email"
-          onChange={(e) => setEmail(e.target.value)}
-          style={styles.input}
-        />
-
-        <input
-          placeholder="password"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
-
-        <button onClick={login} style={styles.btn}>
-          Se connecter
-        </button>
-
-        <p style={{ opacity: 0.5, marginTop: 20 }}>
-          test@rayan.com / 1234
-        </p>
-      </div>
-    );
-  }
-
-  /* ===== DASHBOARD ===== */
-  return (
-    <div style={styles.body}>
-
-      {/* NAV */}
-      <header style={styles.nav}>
-        <h2>Rayan Prod SaaS</h2>
-        <button onClick={logout} style={styles.btn}>
-          Logout
-        </button>
-      </header>
-
-      {/* HERO */}
-      <section style={styles.hero}>
-        <h1>Bienvenue 👋</h1>
-        <p>Accède à tes formations premium</p>
-      </section>
-
-      {/* COURSES GRID (Netflix style) */}
-      <section style={styles.grid}>
-        {COURSES.map((c) => (
-          <div key={c.id} style={styles.card}>
-            <h3>{c.title}</h3>
-            <p style={{ opacity: 0.7 }}>{c.desc}</p>
-            <h2>{c.price}</h2>
-
-            <button
-              style={styles.btnPrimary}
-              onClick={() => setSelected(c)}
-            >
-              Voir
-            </button>
-
-            <button
-              style={styles.btn}
-              onClick={() => buyCourse(c)}
-            >
-              Acheter 💳
-            </button>
-          </div>
-        ))}
-      </section>
-
-      {/* MODAL */}
-      {selected && (
-        <div style={styles.modalBg}>
-          <div style={styles.modal}>
-            <h2>{selected.title}</h2>
-            <p>{selected.desc}</p>
-            <h3>{selected.price}</h3>
-
-            <button
-              style={styles.btn}
-              onClick={() => setSelected(null)}
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
+<style>
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: #000;
+  color: white;
 }
 
-/* ===== STYLE SAAS ===== */
-const styles = {
-  body: {
-    fontFamily: "Arial",
-    background: "#0b0f19",
-    color: "white",
-    minHeight: "100vh",
-  },
+nav {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 60px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  z-index: 10;
+  mix-blend-mode: difference;
+}
 
-  login: {
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-    background: "#0b0f19",
-    color: "white",
-  },
+.hero {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  input: {
-    padding: 10,
-    borderRadius: 8,
-    border: "none",
-    width: 220,
-  },
+.hero video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.55);
+}
 
-  nav: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: 20,
-  },
+.hero h1 {
+  position: relative;
+  font-weight: 200;
+  font-size: 70px;
+  letter-spacing: 6px;
+}
 
-  hero: {
-    textAlign: "center",
-    padding: 40,
-  },
+.section {
+  padding: 160px 10%;
+}
 
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
-    gap: 20,
-    padding: 20,
-  },
+.label {
+  font-size: 12px;
+  opacity: 0.6;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+}
 
-  card: {
-    background: "#111827",
-    padding: 20,
-    borderRadius: 15,
-  },
+.work {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 80px;
+}
 
-  btn: {
-    marginTop: 10,
-    padding: 10,
-    borderRadius: 10,
-    border: "none",
-    cursor: "pointer",
-  },
+.item {
+  position: relative;
+  overflow: hidden;
+  height: 75vh;
+  border-radius: 10px;
+}
 
-  btnPrimary: {
-    marginTop: 10,
-    padding: 10,
-    borderRadius: 10,
-    border: "none",
-    background: "white",
-    color: "black",
-    cursor: "pointer",
-  },
+.item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 1.2s ease;
+  filter: brightness(0.8) contrast(1.05);
+}
 
-  modalBg: {
-    position: "fixed",
-    inset: 0,
-    background: "rgba(0,0,0,0.7)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+.item:hover img {
+  transform: scale(1.03);
+  filter: brightness(1);
+}
 
-  modal: {
-    background: "#111827",
-    padding: 20,
-    borderRadius: 15,
-    width: 300,
-  },
-};
+.caption {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.about {
+  max-width: 700px;
+  font-size: 18px;
+  line-height: 1.8;
+  opacity: 0.85;
+}
+
+footer {
+  padding: 120px 10%;
+  font-size: 12px;
+  opacity: 0.5;
+  letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div>RAYAN PROD</div>
+  <div>WORK / ABOUT / CONTACT</div>
+</nav>
+
+<section class="hero">
+  <video autoplay muted loop>
+    <source src="https://cdn.coverr.co/videos/coverr-filming-city-views-6970/1080p.mp4">
+  </video>
+  <h1>RAYAN PROD</h1>
+</section>
+
+<section class="section">
+  <div class="label">Selected Work</div>
+
+  <div class="work">
+
+    <div class="item">
+      <img src="https://images.unsplash.com/photo-1526481280695-3c687fd5432c?q=80&w=1600" />
+      <div class="caption">Cinematic Project I</div>
+    </div>
+
+    <div class="item">
+      <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600" />
+      <div class="caption">Urban Film Concept</div>
+    </div>
+
+    <div class="item">
+      <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1600" />
+      <div class="caption">Night Visual Story</div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="label">About</div>
+
+  <div class="about">
+    Rayan Prod est une production audiovisuelle spécialisée dans la création de contenus cinématiques, publicitaires et artistiques.
+    Nous racontons des histoires visuelles avec une approche minimaliste et émotionnelle.
+  </div>
+</section>
+
+<footer>
+  © RAYAN PROD — ALL RIGHTS RESERVED
+</footer>
+
+</body>
+</html>
